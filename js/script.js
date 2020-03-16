@@ -53,4 +53,38 @@ jobRoleSelector.addEventListener('change', (e) => {
   }
 })
 
+// checkbox section
+let activitiesSection = document.querySelector('.activities');
+let checkBoxes = document.querySelectorAll('input[type=checkbox]')
+let totalNum = 0;
+let total = document.createElement('p');
+activitiesSection.appendChild(total);
 
+// activities event handler
+activitiesSection.addEventListener('click', (e) => {
+  let time = e.target.getAttribute('data-day-and-time');
+  let cost = parseInt(e.target.getAttribute('data-cost'));
+  console.log(cost);
+  // disables conflicting events
+  if (e.target.checked) {
+    for (i = 0; i < checkBoxes.length; i++) {
+      if (time === checkBoxes[i].getAttribute('data-day-and-time')) {
+        checkBoxes[i].disabled = true;
+      }
+    } 
+    e.target.disabled = false;
+    // add/display cost as events added
+    totalNum += cost;
+    total.innerText = `Total: $${totalNum}`;
+    // renables conflicting events 
+  } else {
+    for (i = 0; i < checkBoxes.length; i++) {
+      if (time === checkBoxes[i].getAttribute('data-day-and-time')) {
+        checkBoxes[i].disabled = false;
+      }
+    }
+    // subtract/display total cost as events removed
+    totalNum -= cost;
+    total.innerText = `Total: $${totalNum}`;
+  }
+})
