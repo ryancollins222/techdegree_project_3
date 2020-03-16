@@ -61,7 +61,7 @@ let total = document.createElement('p');
 activitiesSection.appendChild(total);
 
 // activities event handler
-activitiesSection.addEventListener('click', (e) => {
+activitiesSection.addEventListener('change', (e) => {
   let time = e.target.getAttribute('data-day-and-time');
   let cost = parseInt(e.target.getAttribute('data-cost'));
   console.log(cost);
@@ -76,7 +76,7 @@ activitiesSection.addEventListener('click', (e) => {
     // add/display cost as events added
     totalNum += cost;
     total.innerText = `Total: $${totalNum}`;
-    // renables conflicting events 
+    // enables previously conflicting events 
   } else {
     for (i = 0; i < checkBoxes.length; i++) {
       if (time === checkBoxes[i].getAttribute('data-day-and-time')) {
@@ -88,3 +88,33 @@ activitiesSection.addEventListener('click', (e) => {
     total.innerText = `Total: $${totalNum}`;
   }
 })
+
+// **** payment section
+let paySelect = document.querySelector('#payment');
+let payOptions = paySelect.querySelectorAll('option');
+// make credit card selected by default
+payOptions[0].style.display = 'none';
+payOptions[1].selected = true;
+// payment divs
+let creditDiv = document.querySelector('#credit-card');
+let paypalDiv = document.querySelector('#paypal');
+let bitcoinDiv = document.querySelector('#bitcoin');
+
+function displayActive(div1, div2, div3) {
+  div1.style.display = '';
+  div2.style.display = 'none';
+  div3.style.display = 'none';
+}
+
+paySelect.addEventListener('change', (e) => {
+  if (e.target.value === 'credit card') {
+    displayActive(creditDiv, paypalDiv, bitcoinDiv);
+  } else if (e.target.value === 'paypal') {
+    displayActive(paypalDiv, creditDiv, bitcoinDiv);
+  } else {
+    displayActive(bitcoinDiv, paypalDiv, creditDiv);
+  }
+})
+
+  
+
