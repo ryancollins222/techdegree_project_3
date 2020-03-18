@@ -1,5 +1,6 @@
 // adds focus to name input
-let nameInput = document.querySelector('#name').focus();
+let nameInput = document.querySelector('#name');
+nameInput.focus();
 // hides other job role text input
 let otherInput = document.querySelector('#other-title');
 otherInput.style.display = 'none';
@@ -17,6 +18,9 @@ let colorTitle = document.createElement('option');
 colorTitle.innerText = 'Please select a T-shirt theme';
 colorSelector.prepend(colorTitle);
 let colorOptions = colorSelector.querySelectorAll('option');
+// hide color div until shirt them selected
+let colorDiv = colorSelector.parentNode;
+colorDiv.style.display = 'none';
 
 // hide color options until shirt theme selected
 for (i = 1; i < colorOptions.length; i++) {
@@ -28,6 +32,7 @@ for (i = 1; i < colorOptions.length; i++) {
 
 // event listener for shirt design selector
 designSelector.addEventListener('change', (e) => {
+  colorDiv.style.display ='';
   for (i = 0; i < colorOptions.length; i++) {
     colorOptions[i].style.display = 'none';
   }
@@ -116,5 +121,142 @@ paySelect.addEventListener('change', (e) => {
   }
 })
 
+// **** validation section
+let submitButton = document.querySelector('button');
+
+// name validation
+function nameValidator() {
+  let nameValue = nameInput.value;
+  if (nameValue.length > 0) {
+    nameInput.style.border = '';
+    return true;
+  } else {
+    nameInput.style.border = '3px solid red';
+    return false;
+  }
+}  
+
+// email validation
+function emailValidator() {
+  let emailRegEx  =/^[^@]+@[^.]+.\w+$/gm;
+  let emailInput = document.querySelector('#mail');
+  if (emailRegEx.test(emailInput.value)) {
+    emailInput.style.border = '';
+    return true;
+  } else {
+    emailInput.style.border = '3px solid red';
+    return false;
+  }
+}
+
+// checkbox selected validation
+function checkValidator() {
+  let checked = 0;
+  let registerTitle = activitiesSection.querySelector('legend');
+  for (i = 0; i < checkBoxes.length; i++) {
+    if (checkBoxes[i].checked) {
+      checked += 1;
+    } 
+  }
+  if (checked > 0) {
+    registerTitle.style.color = '';
+    return true;
+  } else {
+    registerTitle.style.color = 'red';
+    return false;
+  }
+}
+
+// credit card validation
+function creditNum() {
+  let creditInput = document.querySelector('#cc-num');
+  let cardNum = creditInput.value;
+  let cardRegex = /^\d{13,16}$/gm;
+
+  if (!cardRegex.test(cardNum)) {
+    creditInput.style.border = '3px solid red';
+    return false;
+  } else {
+    creditInput.style.border = '';
+    return true;
+  }
+}
+
+// zipcode validation
+function zipValidation() {
+  let zipInput = document.querySelector('#zip');
+  let zip = zipInput.value;
+  let zipRegex = /^\d{5}$/gm;
+  if (zipRegex.test(zip)) {
+    zipInput.style.border = '';
+    return true;
+  } else {
+    zipInput.style.border = '3px solid red';
+    return false;
+  }
+}
+
+// cvv validation
+function cvvValidation() {
+  let cvvInput = document.querySelector('#cvv');
+  let cvv = cvvInput.value;
+  let cvvRegex = /^\d{3}$/;
+  if (cvvRegex.test(cvv)) {
+    cvvInput.style.border = '';
+    return true;
+  } else {
+    cvvInput.style.border = '3px solid red';
+    return false;
+  }
+}
+
+//  error message
+let form = document.querySelector('form');
+let p = document.createElement('p');
+p.innerText = '*** All fields in red must be filled out ***';
+p.style.color = 'red';
+function errorMessage() {
+  if (p.style.display !== 'block') {
+    form.appendChild(p);
+  }
+}
+
+// returns bool of validation functions
+function masterValidator(fun1, fun2, fun3) {
+  return fun1 && fun2 && fun3;
+}
+
+// submit button event listener, checking for validation
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  checkValidator();
+  nameValidator(); 
+  emailValidator();
+  // for credit card payment method
+  if (paySelect.value === 'credit card') {
+    creditNum(); 
+    zipValidation(); 
+    cvvValidation();
+    if (masterValidator(creditNum(), zipValidation(), cvvValidation()) &&
+    masterValidator(checkValidator(), nameValidator(), emailValidator())) {
+      location.reload();
+    } else {
+    errorMessage();
+    }
+    // other payment methods
+  } else {
+    if (masterValidator(checkValidator(), nameValidator(), emailValidator())) {
+      location.reload();
+    } else {
+    errorMessage();
+    }
+  }
+
+})
+ 
+  
+  
   
 
+    
+   
