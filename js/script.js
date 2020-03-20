@@ -103,7 +103,9 @@ payOptions[1].selected = true;
 // payment divs
 let creditDiv = document.querySelector('#credit-card');
 let paypalDiv = document.querySelector('#paypal');
+paypalDiv.style.display = 'none';
 let bitcoinDiv = document.querySelector('#bitcoin');
+bitcoinDiv.style.display = 'none';
 
 function displayActive(div1, div2, div3) {
   div1.style.display = '';
